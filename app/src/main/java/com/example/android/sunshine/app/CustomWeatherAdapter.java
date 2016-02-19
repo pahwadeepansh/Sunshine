@@ -45,8 +45,8 @@ public class CustomWeatherAdapter extends ArrayAdapter<Weather> {
             holder = (WeatherHolder)row.getTag();
         }
         Weather weather = data.get(position);
-        holder.txtTitle.setText(weather.main.);
-        holder.icon.setImageResource(weather.icon);
+//        holder.txtTitle.setText(weather.main.);
+//        holder.icon.setImageResource(weather.icon);
 
         return row;
     }
