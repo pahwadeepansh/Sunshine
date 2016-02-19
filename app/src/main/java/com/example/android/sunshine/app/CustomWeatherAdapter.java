@@ -14,12 +14,12 @@ import java.util.List;
 /**
  * Created by deepanshpahwa on 2/19/16.
  */
-public class CustomWeatherAdapter extends ArrayAdapter<Forecast> {
+public class CustomWeatherAdapter extends ArrayAdapter<Weather> {
     Context context;
     int layoutResourceID;
-    List<Forecast> data = null;
+    List<Weather> data = null;
 
-    public CustomWeatherAdapter(Context context, int resource, List<Forecast> data) {
+    public CustomWeatherAdapter(Context context, int resource, List<Weather> data) {
         super(context, resource, data);
         this.context=context;
 //        this.layoutResourceID=layoutResourceID;
@@ -44,7 +44,7 @@ public class CustomWeatherAdapter extends ArrayAdapter<Forecast> {
         {
             holder = (WeatherHolder)row.getTag();
         }
-        Forecast weather = data.get(position).forecastDays.get(position).temp.max;
+        Weather weather = data.get(position);
         holder.txtTitle.setText(weather.main.);
         holder.icon.setImageResource(weather.icon);
 
