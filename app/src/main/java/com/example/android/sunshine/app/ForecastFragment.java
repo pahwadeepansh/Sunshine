@@ -47,7 +47,7 @@ import retrofit.Retrofit;
  */
 public class ForecastFragment extends Fragment {
 
-    private ArrayAdapter<String> mForecastAdapter;
+    private CustomWeatherAdapter mForecastAdapter;
 
     public ForecastFragment() {
     }
@@ -87,11 +87,12 @@ public class ForecastFragment extends Fragment {
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
         mForecastAdapter =
-                new ArrayAdapter<String>(
+                new CustomWeatherAdapter(
                         getActivity(), // The current context (this activity)
                         R.layout.list_item_forecast, // The name of the layout ID.
-                        R.id.list_item_forecast_textview, // The ID of the textview to populate.
-                        new ArrayList<String>());
+                        new DayWeather[]);
+
+
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -112,7 +113,7 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
-    private String[] getWeatherDataFromJson(Forecast forecast, int numDays)
+    private DayWeather[] getWeatherDataFromJson(Forecast forecast, int numDays)
     {
 
         // Thized UTC date for all of our weather.
@@ -126,7 +127,7 @@ public class ForecastFragment extends Fragment {
         // now we work exclusively in UTC
         dayTime = new Time();
 
-        String[] resultStrs = new String[numDays];
+        DayWeather[] resultStrs = new DayWeather[numDays];
 
         // Data is fetched in Celsius by default.
         // If user prefers to see in Fahrenheit, convert the values here.
@@ -167,7 +168,10 @@ public class ForecastFragment extends Fragment {
             double low = temperatureObject.min;
 
             highAndLow = formatHighLows(high, low, unitType);
-            resultStrs[i] = day + " - " + description + " - " + highAndLow;
+            resultStrs[i].day=day;
+            resultStrs[i].description=description;
+            resultStrs[i].high=high;
+            resultStrs[i].low=low;
         }
         return resultStrs;
 
@@ -211,10 +215,10 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onResponse(Response<Forecast> response, Retrofit retrofit) {
                 Forecast forecast = response.body();
-                String[] result = getWeatherDataFromJson(forecast, 7);
+                DayWeather[] result = getWeatherDataFromJson(forecast, 7);
                 if (result != null) {
                     mForecastAdapter.clear();
-                    for (String dayForecastStr : result) {
+                    for (DayWeather dayForecastStr : result) {
                         mForecastAdapter.add(dayForecastStr);
                     }
                     // New data is back from the server.  Hooray!

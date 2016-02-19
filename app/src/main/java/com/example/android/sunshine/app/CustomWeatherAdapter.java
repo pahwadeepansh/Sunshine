@@ -9,17 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
-
 /**
  * Created by deepanshpahwa on 2/19/16.
  */
-public class CustomWeatherAdapter extends ArrayAdapter<Weather> {
+public class CustomWeatherAdapter extends ArrayAdapter<DayWeather> {
     Context context;
     int layoutResourceID;
-    List<Weather> data = null;
+    DayWeather[] data = null;
 
-    public CustomWeatherAdapter(Context context, int resource, List<Weather> data) {
+    public CustomWeatherAdapter(Context context, int resource, DayWeather[] data) {
         super(context, resource, data);
         this.context=context;
 //        this.layoutResourceID=layoutResourceID;
@@ -44,7 +42,7 @@ public class CustomWeatherAdapter extends ArrayAdapter<Weather> {
         {
             holder = (WeatherHolder)row.getTag();
         }
-        Weather weather = data.get(position);
+        DayWeather weather = data[position];
 //        holder.txtTitle.setText(weather.main.);
 //        holder.icon.setImageResource(weather.icon);
 
