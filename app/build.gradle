@@ -18,11 +18,15 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', MyOpenWeatherMapApiKey
+        it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', '"079d2efd21e734f3d4384504fbf7792c"'
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.2'
+    compile 'com.google.code.gson:gson:2.6.1'
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+
 }
