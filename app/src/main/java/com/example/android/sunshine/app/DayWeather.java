@@ -5,11 +5,11 @@ package com.example.android.sunshine.app;
  */
 public class DayWeather {
     String day;
-    double high;
-    double low;
+    String high;
+    String low;
     String description;
 
-    public void DayWeather(String day,int high, int low, String description){
+    public void DayWeather(String day,String high, String low, String description){
         this.day=day;
         this.high=high;
         this.low=low;

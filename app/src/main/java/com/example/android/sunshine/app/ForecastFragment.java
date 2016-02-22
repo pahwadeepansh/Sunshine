@@ -86,11 +86,13 @@ public class ForecastFragment extends Fragment {
 
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
+
+        int layoutID = R.layout.listview_item_row;
         mForecastAdapter =
                 new CustomWeatherAdapter(
                         getActivity(), // The current context (this activity)
-                        R.layout.list_item_forecast, // The name of the layout ID.
-                        new DayWeather[]);
+                        layoutID, // The name of the layout ID.
+                        new DayWeather[7]);// Add a shared preference
 
 
 
@@ -103,9 +105,9 @@ public class ForecastFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String forecast = mForecastAdapter.getItem(position);
+                DayWeather forecast = mForecastAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, forecast);
+                        .putExtra(Intent.EXTRA_TEXT, "DayWeather Forecast");
                 startActivity(intent);
             }
         });
@@ -144,7 +146,7 @@ public class ForecastFragment extends Fragment {
             // For now, using the format "Day, description, hi/low"
             String day;
             String description;
-            String highAndLow;
+            String[] highAndLow;
 
             // Get the JSON object representing the day
             data dayForecast = forecast.forecastDays.get(i);
@@ -170,8 +172,8 @@ public class ForecastFragment extends Fragment {
             highAndLow = formatHighLows(high, low, unitType);
             resultStrs[i].day=day;
             resultStrs[i].description=description;
-            resultStrs[i].high=high;
-            resultStrs[i].low=low;
+            resultStrs[i].high=highAndLow[1];
+            resultStrs[i].low=highAndLow[2];
         }
         return resultStrs;
 
@@ -187,7 +189,7 @@ public class ForecastFragment extends Fragment {
     /**
      * Prepare the weather high/lows for presentation.
      */
-    private String formatHighLows(double high, double low, String unitType) {
+    private String[] formatHighLows(double high, double low, String unitType) {
 
         if (unitType.equals(getActivity().getString(R.string.pref_units_imperial))) {
             high = (high * 1.8) + 32;
@@ -200,7 +202,10 @@ public class ForecastFragment extends Fragment {
         long roundedHigh = Math.round(high);
         long roundedLow = Math.round(low);
 
-        String highLowStr = roundedHigh + "/" + roundedLow;
+        String[] highLowStr = new String[2];
+        highLowStr[1] = String.valueOf(roundedHigh);
+        highLowStr[2] = String.valueOf(roundedLow);
+
         return highLowStr;
     }
 
