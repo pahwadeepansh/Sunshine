@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="35">
+        <TextView
+            android:id="@+id/today"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:text="Today"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:textSize="20dp" />
+
+
+        <ImageView
+            android:id="@+id/imgIcon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:text="Img"
+android:paddingBottom="5dp"
+
+            android:foregroundGravity="center_vertical|center|center_horizontal" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="35"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|center"
+            tools:text="text1"
+            android:text="Now"
+            android:padding="16dp"
+            android:textSize="20dp"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/currentTemp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            tools:text="12"
+            android:textSize="50dp"
+
+            android:gravity="center_vertical|center|center_horizontal" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="30"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/TextNow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|center"
+            tools:text="text1"
+            android:text="Now"
+            android:padding="16dp"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/DayHighValue"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:textAlignment="center"
+            tools:text="high"
+            android:layout_weight="1"
+            android:singleLine="true"
+android:layout_gravity="center"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="28dp" />
+
+        <TextView
+            android:id="@+id/DayLowValue"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:textAlignment="center"
+            tools:text="high"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_gravity="center"
+            android:textSize="28dp" />
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

@@ -7,7 +7,7 @@
         android:title="@string/pref_location_label"
         android:key="@string/pref_location_key"
         android:defaultValue="@string/pref_location_default"
-        android:inputType="text"
+        android:inputType="number"
         android:singleLine="true" />
 
     <ListPreference
@@ -16,5 +16,12 @@
         android:defaultValue="@string/pref_units_metric"
         android:entryValues="@array/pref_units_values"
         android:entries="@array/pref_units_options" />
+
+    <EditTextPreference
+        android:title="@string/pref_days_label"
+        android:key="@string/pref_days_key"
+        android:defaultValue="@string/pref_days_default"
+        android:inputType="number"
+        android:singleLine="true" />
 
 </PreferenceScreen>

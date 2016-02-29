@@ -28,7 +28,11 @@
     <string name="pref_location_key" translatable="false">location</string>
 
     <!-- Default postal code for location preference [CHAR LIMIT=NONE] -->
-    <string name="pref_location_default" translatable="false">94043</string>
+    <string name="pref_location_default" translatable="false">45219</string>
+
+    <string name="pref_days_label" translatable="false">Number of days</string>
+    <string name="pref_days_key" translatable="false">days</string>
+    <string name="pref_days_default" translatable="false">7</string>
 
     <!-- Label for the temperature units preference [CHAR LIMIT=30] -->
     <string name="pref_units_label">Temperature Units</string>

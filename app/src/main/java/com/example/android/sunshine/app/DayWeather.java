@@ -16,5 +16,4 @@ public class DayWeather {
         this.description=description;
     }
 
-
 }

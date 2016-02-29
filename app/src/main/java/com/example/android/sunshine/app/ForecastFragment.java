@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -29,11 +30,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -42,23 +42,24 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 
-/**
- * Encapsulates fetching the forecast and displaying it as a {@link ListView} layout.
- */
+
 public class ForecastFragment extends Fragment {
 
+    private ListView listView;
     private CustomWeatherAdapter mForecastAdapter;
 
     public ForecastFragment() {
     }
 
 
-
+    //    int numOfDays;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+        ;
+
     }
 
     @Override
@@ -72,12 +73,36 @@ public class ForecastFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
         if (id == R.id.action_refresh) {
+            int numOfDays = Integer.parseInt(getSharedPreferences_Days());
             updateWeather();
             return true;
         }
+//        if (id==R.id.)
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private String getSharedPreferences_Days() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        return (sharedPrefs.getString(getActivity().getString(R.string.pref_days_key),
+                getActivity().getString(R.string.pref_days_default)));
+    }
+
+    private String getSharedPreference_Zip(){
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        return (sharedPrefs.getString(getActivity().getString(R.string.pref_location_key),
+                getActivity().getString(R.string.pref_location_default)));
+
+    }
+
+    private String getSharedPreference_Units(){
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        return (sharedPrefs.getString(getActivity().getString(R.string.pref_units_key),
+                getActivity().getString(R.string.pref_units_metric)));
+
+
     }
 
     @Override
@@ -87,19 +112,17 @@ public class ForecastFragment extends Fragment {
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
 
-        int layoutID = R.layout.listview_item_row;
-        mForecastAdapter =
-                new CustomWeatherAdapter(
-                        getActivity(), // The current context (this activity)
-                        layoutID, // The name of the layout ID.
-                        new DayWeather[7]);// Add a shared preference
+//        mForecastAdapter =
+//                new CustomWeatherAdapter(
+//                        getActivity(), // The current context (this activity)
+//                        new DayWeather[0], new DayWeather());// Add a shared preference
 
 
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -119,7 +142,7 @@ public class ForecastFragment extends Fragment {
     {
 
         // Thized UTC date for all of our weather.
-
+        //numDays=Integer.parseInt(getSharedPreferences_Days());
         Time dayTime = new Time();
         dayTime.setToNow();
 
@@ -131,18 +154,9 @@ public class ForecastFragment extends Fragment {
 
         DayWeather[] resultStrs = new DayWeather[numDays];
 
-        // Data is fetched in Celsius by default.
-        // If user prefers to see in Fahrenheit, convert the values here.
-        // We do this rather than fetching in Fahrenheit so that the user can
-        // change this option without us having to re-fetch the data once
-        // we start storing the values in a database.
-        SharedPreferences sharedPrefs =
-                PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String unitType = sharedPrefs.getString(
-                getActivity().getString(R.string.pref_units_key),
-                getActivity().getString(R.string.pref_units_metric));
-
-        for(int i = 0; i < forecast.forecastDays.size(); i++) {
+        String unitType = getSharedPreference_Units();
+        Log.e("ERROR numdays", String.valueOf(numDays));
+        for(int i = 0; i < numDays; i++) {
             // For now, using the format "Day, description, hi/low"
             String day;
             String description;
@@ -170,12 +184,22 @@ public class ForecastFragment extends Fragment {
             double low = temperatureObject.min;
 
             highAndLow = formatHighLows(high, low, unitType);
+            resultStrs[i]=new DayWeather();
             resultStrs[i].day=day;
             resultStrs[i].description=description;
-            resultStrs[i].high=highAndLow[1];
-            resultStrs[i].low=highAndLow[2];
+            resultStrs[i].high=highAndLow[0];
+            resultStrs[i].low=highAndLow[1];
         }
         return resultStrs;
+
+    }
+
+    private CurrentWeather getCurrentWeatherDataFromJSON(CurrentForecast forecast) {
+        String unitType = getSharedPreference_Units();
+        CurrentWeather result=new CurrentWeather();// delete
+        result.current_temp= roundOff(forecast.main.temp,unitType);
+        result.city = forecast.city;
+        return  result; //delete
 
     }
 
@@ -186,56 +210,136 @@ public class ForecastFragment extends Fragment {
         return shortenedDateFormat.format(time);
     }
 
+    private String[] formatHighLows(double celsiusHigh, double celsiusLow, String desiredUnitType) {
+        return formatHighLows(
+                celsiusHigh,
+                celsiusLow,
+                desiredUnitType,
+                getActivity().getString(R.string.pref_units_imperial));
+    }
+
     /**
      * Prepare the weather high/lows for presentation.
      */
-    private String[] formatHighLows(double high, double low, String unitType) {
+    @VisibleForTesting
+    String[] formatHighLows(double celsiusHigh, double celsiusLow, String desiredUnitType, String imperialUnitTypeName) {
 
+        if (desiredUnitType.equals(imperialUnitTypeName)) {
+            celsiusHigh = (celsiusHigh * 1.8) + 32;
+            celsiusLow = (celsiusLow * 1.8) + 32;
+        } else if (!desiredUnitType.equals("metric")) {
+            Log.d("LOGGGGG", "Unit type not found: " + desiredUnitType);
+        }
+
+        // For presentation, assume the user doesn't care about tenths of a degree.
+        long roundedHigh = Math.round(celsiusHigh);
+        long roundedLow = Math.round(celsiusLow);
+
+        String[] highLowStr = new String[2];
+        highLowStr[0] = String.valueOf(roundedHigh);
+        highLowStr[1] = String.valueOf(roundedLow);
+
+        return highLowStr;
+    }
+
+
+
+
+    private String roundOff(BigDecimal temp, String unitType) {
+        double calc= temp.doubleValue();
         if (unitType.equals(getActivity().getString(R.string.pref_units_imperial))) {
-            high = (high * 1.8) + 32;
-            low = (low * 1.8) + 32;
+            calc = (temp.doubleValue() * 1.8) + 32;
+
         } else if (!unitType.equals(getActivity().getString(R.string.pref_units_metric))) {
             Log.d("LOGGGGG", "Unit type not found: " + unitType);
         }
 
         // For presentation, assume the user doesn't care about tenths of a degree.
-        long roundedHigh = Math.round(high);
-        long roundedLow = Math.round(low);
+        long roundedHigh = Math.round(calc);
 
-        String[] highLowStr = new String[2];
-        highLowStr[1] = String.valueOf(roundedHigh);
-        highLowStr[2] = String.valueOf(roundedLow);
+        String highLowStr = String.valueOf(roundedHigh);
 
         return highLowStr;
     }
 
-    private void updateWeather() {
-//        FetchWeath
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://api.openweathermap.org/data/2.5/forecast/daily?").addConverterFactory(GsonConverterFactory.create()).build();
-        WeatherAPI weatheAPI=  retrofit.create(WeatherAPI.class);
+    DayWeather[] result = new DayWeather[0];
+    CurrentWeather CurrentTemp = new CurrentWeather();
 
-        Log.e("ERROR", "Ok...?");
-        Call<Forecast> call = weatheAPI.loadForecast("android");
+    private void updateWeather() {
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://api.openweathermap.org").addConverterFactory(GsonConverterFactory.create()).build();
+        WeatherAPI weatheAPI=  retrofit.create(WeatherAPI.class);
+        String zip = getSharedPreference_Zip().trim();
+        String units = getSharedPreference_Units().trim();
+
+        Log.e("ERROR of days",String.valueOf(Integer.parseInt(getSharedPreferences_Days().trim())));
+        Call<Forecast> call = weatheAPI.loadForecast(zip,units,Integer.parseInt(getSharedPreferences_Days().trim()));
         call.enqueue(new Callback<Forecast>() {
             @Override
             public void onResponse(Response<Forecast> response, Retrofit retrofit) {
-                Forecast forecast = response.body();
-                DayWeather[] result = getWeatherDataFromJson(forecast, 7);
-                if (result != null) {
-                    mForecastAdapter.clear();
-                    for (DayWeather dayForecastStr : result) {
-                        mForecastAdapter.add(dayForecastStr);
-                    }
-                    // New data is back from the server.  Hooray!
+                if (response.isSuccess()) {
+                    Forecast forecast = response.body();
+                    Log.e("ERROR of days",String.valueOf(Integer.parseInt(getSharedPreferences_Days().trim())));
+                    result = getWeatherDataFromJson(forecast, (Integer.parseInt(getSharedPreferences_Days().trim())));
+                    Log.e("ERROR Forecast",result[1].high);
+                    Log.e("ERROR Forecast",result[1].description);
+                    updateAdapter();
+                }
+                if (!response.isSuccess()){
+                    Log.e("ERROR", String.valueOf(response.errorBody()));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Log.e("ERROR", "WTH?", t);
+                Log.e("ERROR", "WTH? in first retrofit connection", t);
             }
         });
+
+//second retrofit network starts
+        Retrofit retrofitNow = new Retrofit.Builder().baseUrl("http://api.openweathermap.org").addConverterFactory(GsonConverterFactory.create()).build();
+        CurrentWeatherAPI weatherNow = retrofitNow.create(CurrentWeatherAPI.class);
+        String zip_now = getSharedPreference_Zip();
+        String units_now = getSharedPreference_Units();
+        Call<CurrentForecast> callNow = weatherNow.loadForecast(zip_now,units_now);
+        callNow.enqueue(new Callback<CurrentForecast>() {
+            @Override
+            public void onResponse(Response<CurrentForecast> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    CurrentForecast forecast = response.body();
+                    CurrentTemp = getCurrentWeatherDataFromJSON(forecast);
+                    Log.e("ERROR CurrentForecast",CurrentTemp.current_temp);
+                    Log.e("ERROR CurrentForecast",CurrentTemp.city);
+
+                    updateAdapter();
+
+                }
+                if (!response.isSuccess()) {
+                    Log.e("ERROR", String.valueOf(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("ERROR", "WTH? in second retrofit connection", t);
+            }
+
+
+        });
+        //second retrofit network ends
+
+        updateAdapter();
+        Log.e("ERROR", String.valueOf(mForecastAdapter.getCount()));
     }
+
+    private void updateAdapter() {
+        mForecastAdapter =
+                new CustomWeatherAdapter(
+                        getActivity(), // The current context (this activity)
+                        result,CurrentTemp);// Add a shared preference
+        listView.setAdapter(mForecastAdapter);
+    }
+
 
     @Override
     public void onStart() {
