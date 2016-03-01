@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,8 +47,8 @@ import retrofit.Retrofit;
 
 public class ForecastFragment extends Fragment {
 
-    private ListView listView;
-    private CustomWeatherAdapter mForecastAdapter;
+    private RecyclerView listView;
+    private CustomRecyclerViewAdapter mForecastAdapter;
 
     public ForecastFragment() {
     }
@@ -112,28 +114,29 @@ public class ForecastFragment extends Fragment {
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
 
-//        mForecastAdapter =
-//                new CustomWeatherAdapter(
-//                        getActivity(), // The current context (this activity)
-//                        new DayWeather[0], new DayWeather());// Add a shared preference
 
 
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // Get a reference to the ListView, and attach this adapter to it.
-        listView = (ListView) rootView.findViewById(R.id.listview_forecast);
-        listView.setAdapter(mForecastAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView = (RecyclerView) rootView.findViewById(R.id.listview_forecast);
 
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                DayWeather forecast = mForecastAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, "DayWeather Forecast");
-                startActivity(intent);
-            }
-        });
+        // Get a reference to the ListView, and attach this adapter to it.
+        LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        listView.setLayoutManager(llm);
+        listView.setAdapter(mForecastAdapter);
+
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                DayWeather forecast = mForecastAdapter.getItem(position);
+//                Intent intent = new Intent(getActivity(), DetailActivity.class)
+//                        .putExtra(Intent.EXTRA_TEXT, "DayWeather Forecast");
+//                startActivity(intent);
+//            }
+//        });
 
         return rootView;
     }
@@ -329,17 +332,16 @@ public class ForecastFragment extends Fragment {
         //second retrofit network ends
 
         updateAdapter();
-        Log.e("ERROR", String.valueOf(mForecastAdapter.getCount()));
+      //  Log.e("ERROR", String.valueOf(mForecastAdapter.getCount()));
     }
 
     private void updateAdapter() {
         mForecastAdapter =
-                new CustomWeatherAdapter(
+                new CustomRecyclerViewAdapter(
                         getActivity(), // The current context (this activity)
                         result,CurrentTemp);// Add a shared preference
         listView.setAdapter(mForecastAdapter);
     }
-
 
     @Override
     public void onStart() {
