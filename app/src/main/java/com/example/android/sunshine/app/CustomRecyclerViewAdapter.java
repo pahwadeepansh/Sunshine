@@ -66,6 +66,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             viewHolder.dayLow.setText(item.low+"°");
 
 
+
             String description = item.description;
 
             if (descriptionContains("cloud",description)){
@@ -118,6 +119,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         intent = new Intent(context, DetailActivity.class);
 //                        .putExtra(Intent.EXTRA_TEXT, "DayWeather Forecast");
         context.startActivity(intent);
+
     }
 
 
