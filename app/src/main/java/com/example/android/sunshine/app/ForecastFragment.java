@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
@@ -47,8 +48,8 @@ import retrofit.Retrofit;
 
 public class ForecastFragment extends Fragment {
 
-    private RecyclerView listView;
-    private CustomRecyclerViewAdapter mForecastAdapter;
+    private ViewPager listView;
+    private CustomViewPagerAdapter mForecastAdapter;
 
     public ForecastFragment() {
     }
@@ -60,7 +61,6 @@ public class ForecastFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
-        ;
 
     }
 
@@ -119,13 +119,13 @@ public class ForecastFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        listView = (RecyclerView) rootView.findViewById(R.id.listview_forecast);
+        listView = (ViewPager) rootView.findViewById(R.id.listview_forecast);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        listView.setLayoutManager(llm);
-        listView.setAdapter(mForecastAdapter);
+//        LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
+//        llm.setOrientation(LinearLayoutManager.VERTICAL);
+
+        //listView.setAdapter(mForecastAdapter);
 
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //
@@ -337,10 +337,12 @@ public class ForecastFragment extends Fragment {
 
     private void updateAdapter() {
         mForecastAdapter =
-                new CustomRecyclerViewAdapter(
-                        getActivity(), // The current context (this activity)
-                        result,CurrentTemp);// Add a shared preference
+                new CustomViewPagerAdapter(
+                        getContext(), // The current context (this activity)
+                        result);// Add a shared preference
         listView.setAdapter(mForecastAdapter);
+        mForecastAdapter.notifyDataSetChanged();
+        listView.setCurrentItem(0);
     }
 
     @Override

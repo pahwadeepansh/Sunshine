@@ -18,7 +18,7 @@ import static android.support.v4.app.ActivityCompat.startActivity;
 /**
  * Created by deepansh on 2/29/16.
  */
-public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class    CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
     DayWeather[] data = null;
     CurrentWeather currentTemp;
