@@ -15,15 +15,12 @@
  */
 package com.example.android.sunshine.app;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,8 +29,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -46,12 +41,12 @@ import retrofit.Retrofit;
 
 
 
-public class ForecastFragment extends Fragment {
+public class ViewPagerFragment extends Fragment {
 
-    private ViewPager listView;
+    private ViewPager viewPager;
     private CustomViewPagerAdapter mForecastAdapter;
 
-    public ForecastFragment() {
+    public ViewPagerFragment() {
     }
 
 
@@ -117,17 +112,17 @@ public class ForecastFragment extends Fragment {
 
 
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.view_pager_fragment, container, false);
 
-        listView = (ViewPager) rootView.findViewById(R.id.listview_forecast);
+        viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
 
         // Get a reference to the ListView, and attach this adapter to it.
 //        LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
 //        llm.setOrientation(LinearLayoutManager.VERTICAL);
 
-        //listView.setAdapter(mForecastAdapter);
+        //viewpager.setAdapter(mForecastAdapter);
 
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//        viewpager.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -344,14 +339,19 @@ public class ForecastFragment extends Fragment {
       //  Log.e("ERROR", String.valueOf(mForecastAdapter.getCount()));
     }
 
+
     private void updateAdapter() {
+
+
         mForecastAdapter =
                 new CustomViewPagerAdapter(
                         getContext(), // The current context (this activity)
                         result,CurrentTemp);// Add a shared preference
-        listView.setAdapter(mForecastAdapter);
+        viewPager.setAdapter(mForecastAdapter);
         mForecastAdapter.notifyDataSetChanged();
-        listView.setCurrentItem(0);
+        viewPager.setCurrentItem(0);
+
+
     }
 
     @Override

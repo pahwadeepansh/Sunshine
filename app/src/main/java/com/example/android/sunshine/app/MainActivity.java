@@ -24,20 +24,60 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends ActionBarActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment())
+                    .add(R.id.container, new ViewPagerFragment())
                     .commit();
         }
+
+        Button RecyclerView;
+        Button ViewPager;
+
+        RecyclerView = (Button) findViewById(R.id.RecyclerView);
+        ViewPager = (Button) findViewById(R.id.ViewPagers);
+
+        loadRecyclerView(savedInstanceState, RecyclerView);
+        loadViewPagerView(savedInstanceState, ViewPager);
+
+
+    }
+
+    private void loadViewPagerView(final Bundle savedInstanceState, Button viewPager) {
+        viewPager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.container, new ViewPagerFragment())
+                            .commit();
+                }
+            }
+        });
+    }
+
+    private void loadRecyclerView(final Bundle savedInstanceState, Button recyclerView) {
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.container, new ViewPagerFragment())
+                            .commit();
+                }
+            }
+        });
     }
 
     @Override

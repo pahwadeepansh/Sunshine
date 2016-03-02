@@ -1,7 +1,5 @@
 package com.example.android.sunshine.app;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,11 +10,11 @@ import static junit.framework.Assert.assertEquals;
  */
 public class ForecastFragmentTest {
 
-    private ForecastFragment fragment;
+    private ViewPagerFragment fragment;
 
     @Before
     public void setup(){
-        fragment = new ForecastFragment();
+        fragment = new ViewPagerFragment();
 
     }
     @Test
