@@ -16,4 +16,10 @@
         android:listSelector="#000000"
         />
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|top"></LinearLayout>
+
 </FrameLayout>

@@ -164,6 +164,9 @@ public class ForecastFragment extends Fragment {
             String day;
             String description;
             String[] highAndLow;
+            String pressure;
+            String humidity;
+            String dayaverage;
 
             // Get the JSON object representing the day
             data dayForecast = forecast.forecastDays.get(i);
@@ -173,8 +176,11 @@ public class ForecastFragment extends Fragment {
             // "this saturday".
             long dateTime;
             // Cheating to convert this to UTC time, which is what we want anyhow
-            dateTime = dayTime.setJulianDay(julianStartDay+i);
+            dateTime = dayTime.setJulianDay(julianStartDay + i);
             day = getReadableDateString(dateTime);
+            pressure=String.valueOf(dayForecast.pressure);
+            humidity=String.valueOf(dayForecast.humidity);
+            dayaverage=String.valueOf(dayForecast.temp.day);
 
             // description is in a child array called "weather", which is 1 element long.
             Weather weatherObject = dayForecast.weather.get(0);
@@ -192,6 +198,9 @@ public class ForecastFragment extends Fragment {
             resultStrs[i].description=description;
             resultStrs[i].high=highAndLow[0];
             resultStrs[i].low=highAndLow[1];
+            resultStrs[i].pressure=pressure;
+            resultStrs[i].humidity=humidity;
+            resultStrs[i].dayAverage=dayaverage;
         }
         return resultStrs;
 
@@ -339,7 +348,7 @@ public class ForecastFragment extends Fragment {
         mForecastAdapter =
                 new CustomViewPagerAdapter(
                         getContext(), // The current context (this activity)
-                        result);// Add a shared preference
+                        result,CurrentTemp);// Add a shared preference
         listView.setAdapter(mForecastAdapter);
         mForecastAdapter.notifyDataSetChanged();
         listView.setCurrentItem(0);
