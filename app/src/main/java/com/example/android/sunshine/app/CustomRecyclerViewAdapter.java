@@ -115,8 +115,8 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     private void startDetailActivityIntent(DayWeather item) {
         DayWeather forecast = item;
         Intent intent;
-        intent = new Intent(context, DetailActivity.class);
-//                        .putExtra(Intent.EXTRA_TEXT, "DayWeather Forecast");
+        intent = new Intent(context, DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, "DayWeather Forecast");
         context.startActivity(intent);
     }
 
