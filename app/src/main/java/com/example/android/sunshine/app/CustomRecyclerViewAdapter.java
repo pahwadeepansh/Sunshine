@@ -39,8 +39,6 @@ public class    CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             case 0: return new ViewHolder0(viewFirstItem);
             case 1: return new ViewHolder1(viewRestItems);
         }
-
-
         return new ViewHolder1(viewRestItems);
     }
 
@@ -57,6 +55,8 @@ public class    CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         int viewType = getItemViewType(position);
         if (viewType == 0) {
             ViewHolder0 viewHolder = (ViewHolder0) holder;
+
+            currentTemp.current_temp= currentTemp.current_temp.substring(currentTemp.current_temp.indexOf('.') );
 
             viewHolder.today.setText("Today");
             viewHolder.city.setText(currentTemp.city);
@@ -87,6 +87,9 @@ public class    CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         }
         if (viewType == 1) {
             ViewHolder1 viewHolder = (ViewHolder1) holder;
+
+            item.high= item.high.substring(  item.high.indexOf('.') );
+            item.low= item.low.substring(  item.low.indexOf('.') );
 
             viewHolder.dayDate.setText(item.day);
             viewHolder.dayDesc.setText(item.description );

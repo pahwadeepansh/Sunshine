@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -180,7 +181,9 @@ public class ForecastFragment extends Fragment {
             day = getReadableDateString(dateTime);
             pressure=String.valueOf(dayForecast.pressure);
             humidity=String.valueOf(dayForecast.humidity);
-            dayaverage=String.valueOf(dayForecast.temp.day);
+
+            //dayaverage=String.valueOf(dayForecast.temp.day);
+            dayaverage = getRidOfDecimal(String.valueOf(dayForecast.temp.day));
 
             // description is in a child array called "weather", which is 1 element long.
             Weather weatherObject = dayForecast.weather.get(0);
@@ -204,6 +207,11 @@ public class ForecastFragment extends Fragment {
         }
         return resultStrs;
 
+    }
+
+    @NonNull
+    private String getRidOfDecimal(String dayaverage) {
+        return String.valueOf((int)Double.parseDouble(dayaverage));
     }
 
     private CurrentWeather getCurrentWeatherDataFromJSON(CurrentForecast forecast) {
