@@ -1,5 +1,7 @@
 package com.example.android.sunshine.app;
 
+import java.io.Serializable;
+
 /**
  * Created by deepansh on 2/23/16.
  */

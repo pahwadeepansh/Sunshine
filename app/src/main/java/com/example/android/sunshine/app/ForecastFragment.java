@@ -23,6 +23,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,15 +61,19 @@ public class ForecastFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
-        ;
+
+;
 
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.forecastfragment, menu);
-    }
 
+
+;
+    }
+    private Toolbar toolbar;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -80,6 +85,8 @@ public class ForecastFragment extends Fragment {
             int numOfDays = Integer.parseInt(getSharedPreferences_Days());
             updateWeather();
             return true;
+
+
         }
 //        if (id==R.id.)
 
@@ -164,6 +171,9 @@ public class ForecastFragment extends Fragment {
             String day;
             String description;
             String[] highAndLow;
+            String pressure;
+            String humidity;
+            String dayAverage;
 
             // Get the JSON object representing the day
             data dayForecast = forecast.forecastDays.get(i);
@@ -180,6 +190,10 @@ public class ForecastFragment extends Fragment {
             Weather weatherObject = dayForecast.weather.get(0);
             description = weatherObject.description;
 
+            pressure=String.valueOf(dayForecast.pressure);
+            humidity=String.valueOf(dayForecast.humidity);
+            dayAverage=String.valueOf(dayForecast.temp.day);
+
             // Temperatures are in a child object called "temp".  Try not to name variables
             // "temp" when working with temperature.  It confuses everybody.
             temp temperatureObject = dayForecast.temp;
@@ -192,6 +206,9 @@ public class ForecastFragment extends Fragment {
             resultStrs[i].description=description;
             resultStrs[i].high=highAndLow[0];
             resultStrs[i].low=highAndLow[1];
+            resultStrs[i].humidity=humidity;
+            resultStrs[i].pressure=pressure;
+            resultStrs[i].dayAverage=dayAverage;
         }
         return resultStrs;
 

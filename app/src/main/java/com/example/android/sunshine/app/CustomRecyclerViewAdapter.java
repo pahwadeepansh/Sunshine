@@ -3,6 +3,8 @@ package com.example.android.sunshine.app;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.Serializable;
 
 import static android.support.v4.app.ActivityCompat.startActivity;
 
@@ -113,10 +117,16 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     private void startDetailActivityIntent(DayWeather item) {
-        DayWeather forecast = item;
+//        DayWeather forecast = item;
+
+//        Bundle bundle=new Bundle();
+//        bundle.pu("DayWeatherResults", data);
+//        bundle.putSerializable("CurrentTempResults",  currentTemp);
+
         Intent intent;
-        intent = new Intent(context, DetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, "DayWeather Forecast");
+        intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("www",data);
+//        bundle.putSerializable("CurrentTemps",  currentTemp);
         context.startActivity(intent);
     }
 
