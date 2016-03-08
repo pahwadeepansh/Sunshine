@@ -21,12 +21,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toolbar;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private android.support.v7.widget.Toolbar toolbar;
@@ -42,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
                     .commit();
         }
 
-        toolbar= (android.support.v7.widget.Toolbar) findViewById(R.id.app_bar);
+        toolbar= (android.support.v7.widget.Toolbar) findViewById(R.id.custom_toolbar);
         setSupportActionBar(toolbar);
     }
 
@@ -63,7 +64,6 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-            this.finish();
             return true;
 
         }
@@ -99,15 +99,15 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+
+
     @Override
     protected void onPause() {
         super.onPause();
-        this.finish();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        this.finish();
     }
 }

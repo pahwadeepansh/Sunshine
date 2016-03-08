@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import static android.support.v4.app.ActivityCompat.startActivity;
 
@@ -24,10 +25,10 @@ import static android.support.v4.app.ActivityCompat.startActivity;
  */
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
-    DayWeather[] data = null;
+    ArrayList<DayWeather> data = null;
     CurrentWeather currentTemp;
 
-    public CustomRecyclerViewAdapter(Context context, DayWeather[] data, CurrentWeather currentTemp){
+    public CustomRecyclerViewAdapter(Context context, ArrayList<DayWeather> data, CurrentWeather currentTemp){
         this.context=context;
         this.data= data;
         this.currentTemp= currentTemp;
@@ -50,7 +51,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final DayWeather item = data[position];
+        final DayWeather item = data.get(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +126,8 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         Intent intent;
         intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("www",data);
+        intent.putParcelableArrayListExtra("www",data);
+//        intent.putExtra();
 //        bundle.putSerializable("CurrentTemps",  currentTemp);
         context.startActivity(intent);
     }
@@ -133,7 +135,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemCount() {
-        return data.length;
+        return data.size();
     }
 
     @Override

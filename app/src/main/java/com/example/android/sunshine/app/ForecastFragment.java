@@ -15,9 +15,9 @@
  */
 package com.example.android.sunshine.app;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.preference.PreferenceManager;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
@@ -32,18 +32,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-
 
 
 public class ForecastFragment extends Fragment {
@@ -62,7 +60,7 @@ public class ForecastFragment extends Fragment {
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
 
-;
+        ;
 
     }
 
@@ -71,9 +69,11 @@ public class ForecastFragment extends Fragment {
         inflater.inflate(R.menu.forecastfragment, menu);
 
 
-;
+        ;
     }
+
     private Toolbar toolbar;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -99,20 +99,21 @@ public class ForecastFragment extends Fragment {
                 getActivity().getString(R.string.pref_days_default)));
     }
 
-    private String getSharedPreference_Zip(){
+    private String getSharedPreference_Zip() {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         return (sharedPrefs.getString(getActivity().getString(R.string.pref_location_key),
                 getActivity().getString(R.string.pref_location_default)));
 
     }
 
-    private String getSharedPreference_Units(){
+    private String getSharedPreference_Units() {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         return (sharedPrefs.getString(getActivity().getString(R.string.pref_units_key),
                 getActivity().getString(R.string.pref_units_metric)));
 
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,11 +123,12 @@ public class ForecastFragment extends Fragment {
         // use it to populate the ListView it's attached to.
 
 
-
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         listView = (RecyclerView) rootView.findViewById(R.id.listview_forecast);
+        listView.addItemDecoration(new DividerItemDecoration(getActivity()));
+        listView.setHasFixedSize(true);
+
 
         // Get a reference to the ListView, and attach this adapter to it.
         LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
@@ -148,8 +150,7 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
-    private DayWeather[] getWeatherDataFromJson(Forecast forecast, int numDays)
-    {
+    private ArrayList<DayWeather> getWeatherDataFromJson(Forecast forecast, int numDays) {
 
         // Thized UTC date for all of our weather.
         //numDays=Integer.parseInt(getSharedPreferences_Days());
@@ -161,12 +162,10 @@ public class ForecastFragment extends Fragment {
 
         // now we work exclusively in UTC
         dayTime = new Time();
-
-        DayWeather[] resultStrs = new DayWeather[numDays];
-
+        ArrayList<DayWeather> resultStrs = new ArrayList<DayWeather>();
         String unitType = getSharedPreference_Units();
         Log.e("ERROR numdays", String.valueOf(numDays));
-        for(int i = 0; i < numDays; i++) {
+        for (int i = 0; i < numDays; i++) {//hardcoded
             // For now, using the format "Day, description, hi/low"
             String day;
             String description;
@@ -183,16 +182,16 @@ public class ForecastFragment extends Fragment {
             // "this saturday".
             long dateTime;
             // Cheating to convert this to UTC time, which is what we want anyhow
-            dateTime = dayTime.setJulianDay(julianStartDay+i);
+            dateTime = dayTime.setJulianDay(julianStartDay + i);
             day = getReadableDateString(dateTime);
 
             // description is in a child array called "weather", which is 1 element long.
             Weather weatherObject = dayForecast.weather.get(0);
             description = weatherObject.description;
 
-            pressure=String.valueOf(dayForecast.pressure);
-            humidity=String.valueOf(dayForecast.humidity);
-            dayAverage=String.valueOf(dayForecast.temp.day);
+            pressure = String.valueOf(dayForecast.pressure);
+            humidity = String.valueOf(dayForecast.humidity);
+            dayAverage = String.valueOf(dayForecast.temp.day);
 
             // Temperatures are in a child object called "temp".  Try not to name variables
             // "temp" when working with temperature.  It confuses everybody.
@@ -201,14 +200,14 @@ public class ForecastFragment extends Fragment {
             double low = temperatureObject.min;
 
             highAndLow = formatHighLows(high, low, unitType);
-            resultStrs[i]=new DayWeather();
-            resultStrs[i].day=day;
-            resultStrs[i].description=description;
-            resultStrs[i].high=highAndLow[0];
-            resultStrs[i].low=highAndLow[1];
-            resultStrs[i].humidity=humidity;
-            resultStrs[i].pressure=pressure;
-            resultStrs[i].dayAverage=dayAverage;
+            resultStrs.add(i, new DayWeather(Parcel.obtain()));
+            resultStrs.get(i).day =day;
+            resultStrs.get(i).description = description;
+            resultStrs.get(i).high = highAndLow[0];
+            resultStrs.get(i).low = highAndLow[1];
+            resultStrs.get(i).humidity = humidity;
+            resultStrs.get(i).pressure = pressure;
+            resultStrs.get(i).dayAverage =  Integer.toString(((int)Double.parseDouble(dayAverage)));
         }
         return resultStrs;
 
@@ -216,14 +215,14 @@ public class ForecastFragment extends Fragment {
 
     private CurrentWeather getCurrentWeatherDataFromJSON(CurrentForecast forecast) {
         String unitType = getSharedPreference_Units();
-        CurrentWeather result=new CurrentWeather();// delete
-        result.current_temp= roundOff(forecast.main.temp,unitType);
+        CurrentWeather result = new CurrentWeather();// delete
+        result.current_temp = roundOff(forecast.main.temp, unitType);
         result.city = forecast.city;
-        return  result; //delete
+        return result; //delete
 
     }
 
-    private String getReadableDateString(long time){
+    private String getReadableDateString(long time) {
         // Because the API returns a unix timestamp (measured in seconds),
         // it must be converted to milliseconds in order to be converted to valid date.
         SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
@@ -263,15 +262,13 @@ public class ForecastFragment extends Fragment {
     }
 
 
-
-
-    private String roundOff(BigDecimal temp, String unitType) {
-        double calc= temp.doubleValue();
-        if (unitType.equals(getActivity().getString(R.string.pref_units_imperial))) {
+    private String roundOff(BigDecimal temp, String requiredUnitType) {
+        double calc = temp.doubleValue();
+        if (requiredUnitType.equals(getActivity().getString(R.string.pref_units_imperial))) {
             calc = (temp.doubleValue() * 1.8) + 32;
 
-        } else if (!unitType.equals(getActivity().getString(R.string.pref_units_metric))) {
-            Log.d("LOGGGGG", "Unit type not found: " + unitType);
+        } else if (!requiredUnitType.equals(getActivity().getString(R.string.pref_units_metric))) {
+            Log.d("LOGGGGG", "Unit type not found: " + requiredUnitType);
         }
 
         // For presentation, assume the user doesn't care about tenths of a degree.
@@ -282,30 +279,30 @@ public class ForecastFragment extends Fragment {
         return highLowStr;
     }
 
-    DayWeather[] result = new DayWeather[0];
+    ArrayList<DayWeather> result = new ArrayList<DayWeather>();
     CurrentWeather CurrentTemp = new CurrentWeather();
 
     private void updateWeather() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://api.openweathermap.org").addConverterFactory(GsonConverterFactory.create()).build();
-        WeatherAPI weatheAPI=  retrofit.create(WeatherAPI.class);
+        WeatherAPI weatherAPI = retrofit.create(WeatherAPI.class);
         String zip = getSharedPreference_Zip().trim();
         String units = getSharedPreference_Units().trim();
 
-        Log.e("ERROR of days",String.valueOf(Integer.parseInt(getSharedPreferences_Days().trim())));
-        Call<Forecast> call = weatheAPI.loadForecast(zip,units,Integer.parseInt(getSharedPreferences_Days().trim()));
+        Log.e("ERROR of days", String.valueOf(Integer.parseInt(getSharedPreferences_Days().trim())));
+        Call<Forecast> call = weatherAPI.loadForecast(zip, units, Integer.parseInt(getSharedPreferences_Days().trim()));
         call.enqueue(new Callback<Forecast>() {
             @Override
             public void onResponse(Response<Forecast> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     Forecast forecast = response.body();
-                    Log.e("ERROR of days",String.valueOf(Integer.parseInt(getSharedPreferences_Days().trim())));
+                    Log.e("ERROR of days", String.valueOf(Integer.parseInt(getSharedPreferences_Days().trim())));
                     result = getWeatherDataFromJson(forecast, (Integer.parseInt(getSharedPreferences_Days().trim())));
-                    Log.e("ERROR Forecast",result[1].high);
-                    Log.e("ERROR Forecast",result[1].description);
+                    Log.e("ERROR Forecast", result.get(1).high);
+                    Log.e("ERROR Forecast", result.get(1).description);
                     updateAdapter();
                 }
-                if (!response.isSuccess()){
+                if (!response.isSuccess()) {
                     Log.e("ERROR", String.valueOf(response.errorBody()));
                 }
             }
@@ -321,15 +318,15 @@ public class ForecastFragment extends Fragment {
         CurrentWeatherAPI weatherNow = retrofitNow.create(CurrentWeatherAPI.class);
         String zip_now = getSharedPreference_Zip();
         String units_now = getSharedPreference_Units();
-        Call<CurrentForecast> callNow = weatherNow.loadForecast(zip_now,units_now);
+        Call<CurrentForecast> callNow = weatherNow.loadForecast(zip_now, units_now);
         callNow.enqueue(new Callback<CurrentForecast>() {
             @Override
             public void onResponse(Response<CurrentForecast> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
                     CurrentForecast forecast = response.body();
                     CurrentTemp = getCurrentWeatherDataFromJSON(forecast);
-                    Log.e("ERROR CurrentForecast",CurrentTemp.current_temp);
-                    Log.e("ERROR CurrentForecast",CurrentTemp.city);
+                    Log.e("ERROR CurrentForecast", CurrentTemp.current_temp);
+                    Log.e("ERROR CurrentForecast", CurrentTemp.city);
 
                     updateAdapter();
 
@@ -349,15 +346,21 @@ public class ForecastFragment extends Fragment {
         //second retrofit network ends
 
         updateAdapter();
-      //  Log.e("ERROR", String.valueOf(mForecastAdapter.getCount()));
+        //  Log.e("ERROR", String.valueOf(mForecastAdapter.getCount()));
     }
 
     private void updateAdapter() {
         mForecastAdapter =
                 new CustomRecyclerViewAdapter(
                         getActivity(), // The current context (this activity)
-                        result,CurrentTemp);// Add a shared preference
+                        result, CurrentTemp);// Add a shared preference
         listView.setAdapter(mForecastAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateWeather();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.android.sunshine.app;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,15 +9,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by deepansh on 3/1/16.
  */
 public class CustomViewPagerAdapter extends PagerAdapter{
     private Context mContext;
-    private DayWeather[] item;
+    private ArrayList<DayWeather> item;
     private CurrentWeather currentTemp;
 
-    public CustomViewPagerAdapter(Context context,DayWeather[] dayWeather,CurrentWeather currentTemp) {
+    public CustomViewPagerAdapter(Context context,  ArrayList<DayWeather> dayWeather,CurrentWeather currentTemp) {
         mContext=context;
         this.item =dayWeather;
         this.currentTemp = currentTemp;
@@ -32,7 +35,7 @@ public class CustomViewPagerAdapter extends PagerAdapter{
         if (position==0) {
             convertView = (ViewGroup) inflater.inflate(R.layout.view_pager_item_layout, collection, false);
 
-            final DayWeather daywthr = item[position];
+            final DayWeather daywthr = item.get(position);
             int viewType = getItemViewType(position);
             String description;
 
@@ -83,7 +86,7 @@ public class CustomViewPagerAdapter extends PagerAdapter{
         else {
             convertView = (ViewGroup) inflater.inflate(R.layout.view_pager_item_layout, collection, false);
 
-            final DayWeather daywthr = item[position];
+            final DayWeather daywthr = item.get(position);
             int viewType = getItemViewType(position);
 
             String description;
@@ -147,7 +150,7 @@ public class CustomViewPagerAdapter extends PagerAdapter{
 
     @Override
     public int getCount() {
-        return item.length;
+        return item.size();
     }
 
     @Override

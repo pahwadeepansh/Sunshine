@@ -4,6 +4,12 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:colorPrimary" tools:targetApi="lollipop">@color/blue_500</item>
         <item name="android:colorAccent" tools:targetApi="lollipop">@color/red_a200</item>
+        <item name="android:textColor">#555555</item>
+        <item name="android:textColorPrimary">#ffffff</item>
+    </style>
+
+    <style name="AppToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">@color/blue_500</item>
     </style>
 
 </resources>

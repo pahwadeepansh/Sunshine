@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toolbar;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by deepansh on 3/7/16.
@@ -26,27 +27,27 @@ public class DetailFragment extends Fragment {
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
 
     private static final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
-    //        private DayWeather data;
-    CurrentWeather currentTemp;
-    DayWeather[] result;
+            private DayWeather data;
+//    CurrentWeather currentTemp;
+    ArrayList<DayWeather> result= new ArrayList<DayWeather>();
     ViewPager viewpager;
-    CurrentWeather currentWeatherObject;
+    CurrentWeather currentWeatherObject= new CurrentWeather();
 
     public DetailFragment() {
         setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container1,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_detail, container1, false);
         viewpager = (ViewPager) rootView.findViewById(R.id.DetailActivityViewPager);
 
         Intent intent = getActivity().getIntent();
-        Bundle bundle = intent.getExtras();
+//        Bundle bundle = intent.getExtras();
         if (intent != null) {
-            result = bundle.getParcelable("www");
+            result = intent.getParcelableArrayListExtra("www");
         }
 
         currentWeatherObject.current_temp="234";
