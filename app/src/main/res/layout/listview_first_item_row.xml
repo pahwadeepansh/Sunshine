@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="horizontal">
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="35">
+        android:layout_weight="35"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/today"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="0dp"
-            android:text="Today"
             android:gravity="center_horizontal"
             android:padding="5dp"
+            android:text="Today"
             android:textSize="20dp" />
 
 
@@ -26,81 +27,85 @@
             android:id="@+id/imgIcon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:text="Img"
-android:paddingBottom="5dp"
+            android:foregroundGravity="center_vertical|center|center_horizontal"
+            android:paddingBottom="5dp"
+            android:transitionName="@string/transition_image"
 
-            android:foregroundGravity="center_vertical|center|center_horizontal" />
+            tools:text="Img" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="35"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/city"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:gravity="top|center"
-            tools:text="text1"
-            android:text="Now"
             android:padding="16dp"
+            android:text="Now"
             android:textSize="20dp"
-            android:layout_gravity="center"/>
+            tools:text="text1" />
+
         <TextView
             android:id="@+id/currentTemp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
-            tools:text="12"
+            android:gravity="center_vertical|center|center_horizontal"
             android:textSize="50dp"
 
-            android:gravity="center_vertical|center|center_horizontal" />
+            tools:text="12" />
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="30"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/TextNow"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="top|center"
-            tools:text="text1"
-            android:text="Now"
             android:padding="16dp"
-            android:textSize="20dp" />
+            android:text="Now"
+            android:textSize="20dp"
+            tools:text="text1" />
 
         <TextView
             android:id="@+id/DayHighValue"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:textAlignment="center"
-            tools:text="high"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:singleLine="true"
-android:layout_gravity="center"
             android:gravity="center_vertical|center_horizontal"
-            android:textSize="28dp" />
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textSize="28dp"
+            tools:text="high" />
 
         <TextView
             android:id="@+id/DayLowValue"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:textAlignment="center"
-            tools:text="high"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:gravity="center_vertical|center_horizontal"
             android:layout_gravity="center"
-            android:textSize="28dp" />
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textSize="28dp"
+            tools:text="high" />
 
 
     </LinearLayout>
-
-
 
 
 </LinearLayout>

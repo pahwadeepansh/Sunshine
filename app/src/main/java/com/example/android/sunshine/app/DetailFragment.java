@@ -40,6 +40,7 @@ public class DetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container1,
                              Bundle savedInstanceState) {
+        int position = 1;
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container1, false);
         viewpager = (ViewPager) rootView.findViewById(R.id.DetailActivityViewPager);
@@ -48,12 +49,13 @@ public class DetailFragment extends Fragment {
 //        Bundle bundle = intent.getExtras();
         if (intent != null) {
             result = intent.getParcelableArrayListExtra("www");
+            position = intent.getIntExtra("position", 1);
         }
 
         currentWeatherObject.current_temp="234";
         currentWeatherObject.city="Chicago";
+        viewpager.setCurrentItem(position);
         viewpager.setAdapter(new CustomViewPagerAdapter(getContext(),result,currentWeatherObject));
-
         return rootView;
 
     }

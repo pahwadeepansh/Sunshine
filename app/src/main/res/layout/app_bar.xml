@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/AppToolbar"
-        />
+        app:theme="@style/AppToolbar" />
 
 </app:android.support.design.widget.AppBarLayout>

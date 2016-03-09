@@ -1,48 +1,48 @@
 package com.example.android.sunshine.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-
-import static android.support.v4.app.ActivityCompat.startActivity;
 
 
 /**
  * Created by deepansh on 2/29/16.
  */
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    Context context;
+    Activity activity;
     ArrayList<DayWeather> data = null;
     CurrentWeather currentTemp;
 
-    public CustomRecyclerViewAdapter(Context context, ArrayList<DayWeather> data, CurrentWeather currentTemp){
-        this.context=context;
-        this.data= data;
-        this.currentTemp= currentTemp;
+    public CustomRecyclerViewAdapter(Activity activity, ArrayList<DayWeather> data, CurrentWeather currentTemp) {
+        this.activity = activity;
+        this.data = data;
+        this.currentTemp = currentTemp;
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = (LayoutInflater) context
+        LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View viewFirstItem=inflater.inflate(R.layout.listview_first_item_row, parent, false);
+        View viewFirstItem = inflater.inflate(R.layout.listview_first_item_row, parent, false);
         View viewRestItems = inflater.inflate(R.layout.listview_item_row, parent, false);
 
         switch (viewType) {
-            case 0: return new ViewHolder0(viewFirstItem);
-            case 1: return new ViewHolder1(viewRestItems);
+            case 0:
+                return new ViewHolder0(viewFirstItem);
+            case 1:
+                return new ViewHolder1(viewRestItems);
         }
 
 
@@ -50,12 +50,14 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final DayWeather item = data.get(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
-                startDetailActivityIntent(item);
+            public void onClick(View view) {
+//                TransitionManager.go(Scene.getSceneForLayout((ViewGroup) getc));
+                startDetailActivityIntent(item, view, position);
 
             }
         });
@@ -67,25 +69,25 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             viewHolder.city.setText(currentTemp.city);
             viewHolder.currentTemp.setText(currentTemp.current_temp + "°");
             viewHolder.textNow.setText("Now");
-            viewHolder.dayHigh.setText(item.high+"°");
-            viewHolder.dayLow.setText(item.low+"°");
+            viewHolder.dayHigh.setText(item.high + "°");
+            viewHolder.dayLow.setText(item.low + "°");
 
 
             String description = item.description;
 
-            if (descriptionContains("cloud",description)){
+            if (descriptionContains("cloud", description)) {
                 viewHolder.imageView.setImageResource(R.drawable.cloud);
             }
-            if (descriptionContains("rain",description)){
+            if (descriptionContains("rain", description)) {
                 viewHolder.imageView.setImageResource(R.drawable.rain);
             }
-            if (descriptionContains("snow",description)){
+            if (descriptionContains("snow", description)) {
                 viewHolder.imageView.setImageResource(R.drawable.snow);
             }
-            if (descriptionContains("thunder",description)){
+            if (descriptionContains("thunder", description)) {
                 viewHolder.imageView.setImageResource(R.drawable.thunder);
             }
-            if (descriptionContains("clear",description)){
+            if (descriptionContains("clear", description)) {
                 viewHolder.imageView.setImageResource(R.drawable.clear);
             }
         }
@@ -93,31 +95,32 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             ViewHolder1 viewHolder = (ViewHolder1) holder;
 
             viewHolder.dayDate.setText(item.day);
-            viewHolder.dayDesc.setText(item.description );
-            viewHolder.dayTempHigh.setText((item.high+"°"));
-            viewHolder.dayTempLow.setText((item.low+"°"));
+            viewHolder.dayDesc.setText(item.description);
+            viewHolder.dayTempHigh.setText((item.high + "°"));
+            viewHolder.dayTempLow.setText((item.low + "°"));
 
             String description = item.description;
 
-            if (descriptionContains("cloud",description)){
+            if (descriptionContains("cloud", description)) {
                 viewHolder.imageView.setImageResource(R.drawable.cloud);
             }
-            if (descriptionContains("rain",description)){
+            if (descriptionContains("rain", description)) {
                 viewHolder.imageView.setImageResource(R.drawable.rain);
             }
-            if (descriptionContains("snow",description)){
+            if (descriptionContains("snow", description)) {
                 viewHolder.imageView.setImageResource(R.drawable.snow);
             }
-            if (descriptionContains("thunder",description)){
+            if (descriptionContains("thunder", description)) {
                 viewHolder.imageView.setImageResource(R.drawable.thunder);
             }
-            if (descriptionContains("clear",description)){
+            if (descriptionContains("clear", description)) {
                 viewHolder.imageView.setImageResource(R.drawable.clear);
             }
         }
     }
 
-    private void startDetailActivityIntent(DayWeather item) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void startDetailActivityIntent(DayWeather item, View view, int position) {
 //        DayWeather forecast = item;
 
 //        Bundle bundle=new Bundle();
@@ -125,11 +128,18 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 //        bundle.putSerializable("CurrentTempResults",  currentTemp);
 
         Intent intent;
-        intent = new Intent(context, DetailActivity.class);
-        intent.putParcelableArrayListExtra("www",data);
+        Bundle bundle = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(activity, view.findViewById(R.id.imgIcon), activity.getString(R.string.transition_image)).toBundle();
+
+
+        intent = new Intent(activity, DetailActivity.class);
+        intent.putParcelableArrayListExtra("www", data);
+        intent.putExtra("position", position);
+
 //        intent.putExtra();
 //        bundle.putSerializable("CurrentTemps",  currentTemp);
-        context.startActivity(intent);
+        activity.startActivity(intent, bundle);
+
     }
 
 
@@ -140,10 +150,9 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemViewType(int position) {
-        if (position==0){
+        if (position == 0) {
             return 0;
-        }
-        else {
+        } else {
             return 1;
         }
     }
@@ -190,10 +199,10 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             dayTempLow = (TextView) convertView.findViewById(R.id.dayTempLow);
         }
     }
-    private boolean descriptionContains(String str2,String description) {
+
+    private boolean descriptionContains(String str2, String description) {
         return description.toLowerCase().contains(str2.toLowerCase());
     }
-
 
 
 //    public int getItem(int position) {

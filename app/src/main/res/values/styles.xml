@@ -6,7 +6,27 @@
         <item name="android:colorAccent" tools:targetApi="lollipop">@color/red_a200</item>
         <item name="android:textColor">#555555</item>
         <item name="android:textColorPrimary">#ffffff</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions" tools:targetApi="lollipop">true</item>
+
+
+        <item name="android:windowEnterTransition" tools:targetApi="lollipop">@transition/change_image_transform
+        </item>
+
+        <item name="android:windowExitTransition" tools:targetApi="lollipop">@transition/change_image_transform
+        </item>
+
+        <!--&lt;!&ndash; specify shared element transitions &ndash;&gt;-->
+        <item name="android:windowSharedElementEnterTransition" tools:targetApi="lollipop">
+            @transition/change_image_transform
+        </item>
+        <item name="android:windowSharedElementExitTransition" tools:targetApi="lollipop">
+            @transition/change_image_transform
+        </item>
+
     </style>
+
 
     <style name="AppToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorPrimary">@color/blue_500</item>

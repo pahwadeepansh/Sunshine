@@ -352,7 +352,7 @@ public class ForecastFragment extends Fragment {
     private void updateAdapter() {
         mForecastAdapter =
                 new CustomRecyclerViewAdapter(
-                        getActivity(), // The current context (this activity)
+                        getActivity(), // The current activity (this activity)
                         result, CurrentTemp);// Add a shared preference
         listView.setAdapter(mForecastAdapter);
     }

@@ -16,8 +16,10 @@
 
 package com.example.android.sunshine.app;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,7 @@ import android.view.MenuItem;
 
 public class DetailActivity extends AppCompatActivity {
     private Toolbar toolbar;
+    Activity activity= this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,4 +87,9 @@ public class DetailActivity extends AppCompatActivity {
      * A placeholder fragment containing a simple view.
      */
 
+    @Override
+    public void onBackPressed() {
+        supportFinishAfterTransition();
+        super.onBackPressed();
+    }
 }
