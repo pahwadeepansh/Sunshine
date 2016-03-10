@@ -24,6 +24,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toolbar;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -33,11 +34,15 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new ForecastFragment())
                     .commit();
         }
+        android.support.v7.widget.Toolbar toolbar;
+        toolbar= (android.support.v7.widget.Toolbar) findViewById(R.id.custom_toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
