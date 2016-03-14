@@ -48,31 +48,23 @@ public class ForecastFragment extends Fragment {
 
     private RecyclerView listView;
     private CustomRecyclerViewAdapter mForecastAdapter;
+    private Toolbar toolbar;
+    ArrayList<DayWeather> result = new ArrayList<DayWeather>();
+    CurrentWeather CurrentTemp = new CurrentWeather();
 
-    public ForecastFragment() {
-    }
 
-
-    //    int numOfDays;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
-
-        ;
-
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.forecastfragment, menu);
-
-
-        ;
     }
 
-    private Toolbar toolbar;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -80,16 +72,11 @@ public class ForecastFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         if (id == R.id.action_refresh) {
             int numOfDays = Integer.parseInt(getSharedPreferences_Days());
             updateWeather();
             return true;
-
-
         }
-//        if (id==R.id.)
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -103,15 +90,12 @@ public class ForecastFragment extends Fragment {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         return (sharedPrefs.getString(getActivity().getString(R.string.pref_location_key),
                 getActivity().getString(R.string.pref_location_default)));
-
     }
 
     private String getSharedPreference_Units() {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         return (sharedPrefs.getString(getActivity().getString(R.string.pref_units_key),
                 getActivity().getString(R.string.pref_units_metric)));
-
-
     }
 
 
@@ -122,30 +106,17 @@ public class ForecastFragment extends Fragment {
         // The ArrayAdapter will take data from a source and
         // use it to populate the ListView it's attached to.
 
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         listView = (RecyclerView) rootView.findViewById(R.id.listview_forecast);
         listView.addItemDecoration(new DividerItemDecoration(getActivity()));
         listView.setHasFixedSize(true);
 
-
         // Get a reference to the ListView, and attach this adapter to it.
         LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         listView.setLayoutManager(llm);
         listView.setAdapter(mForecastAdapter);
-
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                DayWeather forecast = mForecastAdapter.getItem(position);
-//                Intent intent = new Intent(getActivity(), DetailActivity.class)
-//                        .putExtra(Intent.EXTRA_TEXT, "DayWeather Forecast");
-//                startActivity(intent);
-//            }
-//        });
 
         return rootView;
     }
@@ -201,13 +172,13 @@ public class ForecastFragment extends Fragment {
 
             highAndLow = formatHighLows(high, low, unitType);
             resultStrs.add(i, new DayWeather(Parcel.obtain()));
-            resultStrs.get(i).day =day;
+            resultStrs.get(i).day = day;
             resultStrs.get(i).description = description;
             resultStrs.get(i).high = highAndLow[0];
             resultStrs.get(i).low = highAndLow[1];
             resultStrs.get(i).humidity = humidity;
             resultStrs.get(i).pressure = pressure;
-            resultStrs.get(i).dayAverage =  Integer.toString(((int)Double.parseDouble(dayAverage)));
+            resultStrs.get(i).dayAverage = Integer.toString(((int) Double.parseDouble(dayAverage)));
         }
         return resultStrs;
 
@@ -219,7 +190,6 @@ public class ForecastFragment extends Fragment {
         result.current_temp = roundOff(forecast.main.temp, unitType);
         result.city = forecast.city;
         return result; //delete
-
     }
 
     private String getReadableDateString(long time) {
@@ -237,9 +207,6 @@ public class ForecastFragment extends Fragment {
                 getActivity().getString(R.string.pref_units_imperial));
     }
 
-    /**
-     * Prepare the weather high/lows for presentation.
-     */
     @VisibleForTesting
     String[] formatHighLows(double celsiusHigh, double celsiusLow, String desiredUnitType, String imperialUnitTypeName) {
 
@@ -261,7 +228,6 @@ public class ForecastFragment extends Fragment {
         return highLowStr;
     }
 
-
     private String roundOff(BigDecimal temp, String requiredUnitType) {
         double calc = temp.doubleValue();
         if (requiredUnitType.equals(getActivity().getString(R.string.pref_units_imperial))) {
@@ -277,12 +243,14 @@ public class ForecastFragment extends Fragment {
         String highLowStr = String.valueOf(roundedHigh);
 
         return highLowStr;
-    }
-
-    ArrayList<DayWeather> result = new ArrayList<DayWeather>();
-    CurrentWeather CurrentTemp = new CurrentWeather();
+    }    //Takes in temperature in metric , rounds off and converts if required.
 
     private void updateWeather() {
+
+        if (!result.isEmpty()) {
+            return;
+        }
+
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://api.openweathermap.org").addConverterFactory(GsonConverterFactory.create()).build();
         WeatherAPI weatherAPI = retrofit.create(WeatherAPI.class);
@@ -353,14 +321,14 @@ public class ForecastFragment extends Fragment {
         mForecastAdapter =
                 new CustomRecyclerViewAdapter(
                         getActivity(), // The current activity (this activity)
-                        result, CurrentTemp);// Add a shared preference
+                        result, CurrentTemp,getContext());// Add a shared preference
         listView.setAdapter(mForecastAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateWeather();
+//        updateWeather();
     }
 
     @Override

@@ -16,23 +16,21 @@
 
 package com.example.android.sunshine.app;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class DetailActivity extends AppCompatActivity {
     private Toolbar toolbar;
-    Activity activity= this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+//        requestWindowFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
@@ -54,7 +52,6 @@ public class DetailActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.detail, menu);
         return true;
-
     }
 
     @Override
@@ -68,28 +65,28 @@ public class DetailActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
+        } else if (id == android.R.id.home) {
+            super.onBackPressed();
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-//
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-//        if (keyCode == KeyEvent.KEYCODE_BACK ) {
-//            Intent i = new Intent(this, MainActivity.class);
-//            startActivity(i);
-//            return true;
-//        }
-//
-//        return super.onKeyDown(keyCode, event);
-//    }
-    /**
-     * A placeholder fragment containing a simple view.
-     */
 
     @Override
     public void onBackPressed() {
-        supportFinishAfterTransition();
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
     }
 }

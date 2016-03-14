@@ -4,13 +4,17 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,11 +28,16 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     Activity activity;
     ArrayList<DayWeather> data = null;
     CurrentWeather currentTemp;
+    Context context;
+    private int expandedPosition = -1;
 
-    public CustomRecyclerViewAdapter(Activity activity, ArrayList<DayWeather> data, CurrentWeather currentTemp) {
+
+    public CustomRecyclerViewAdapter(Activity activity, ArrayList<DayWeather> data, CurrentWeather currentTemp, Context context
+    ) {
         this.activity = activity;
         this.data = data;
         this.currentTemp = currentTemp;
+        this.context = context;
     }
 
     @Override
@@ -44,26 +53,28 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             case 1:
                 return new ViewHolder1(viewRestItems);
         }
-
-
         return new ViewHolder1(viewRestItems);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final DayWeather item = data.get(position);
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-//                TransitionManager.go(Scene.getSceneForLayout((ViewGroup) getc));
-                startDetailActivityIntent(item, view, position);
+                 startDetailActivityIntent(item, view, position);
 
             }
         });
+
+
         int viewType = getItemViewType(position);
         if (viewType == 0) {
             ViewHolder0 viewHolder = (ViewHolder0) holder;
+
 
             viewHolder.today.setText("Today");
             viewHolder.city.setText(currentTemp.city);
@@ -76,23 +87,26 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             String description = item.description;
 
             if (descriptionContains("cloud", description)) {
-                viewHolder.imageView.setImageResource(R.drawable.cloud);
+                viewHolder.imageView.setImageResource(R.drawable.cloud_big);
             }
             if (descriptionContains("rain", description)) {
-                viewHolder.imageView.setImageResource(R.drawable.rain);
+                viewHolder.imageView.setImageResource(R.drawable.rain_big);
             }
             if (descriptionContains("snow", description)) {
-                viewHolder.imageView.setImageResource(R.drawable.snow);
+                viewHolder.imageView.setImageResource(R.drawable.snow_big);
             }
             if (descriptionContains("thunder", description)) {
-                viewHolder.imageView.setImageResource(R.drawable.thunder);
+                viewHolder.imageView.setImageResource(R.drawable.thunder_big);
             }
             if (descriptionContains("clear", description)) {
-                viewHolder.imageView.setImageResource(R.drawable.clear);
+                viewHolder.imageView.setImageResource(R.drawable.clear_big);
             }
+            final int newColor = ContextCompat.getColor(context, R.color.text_color_gray);
+            viewHolder.imageView.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
         }
         if (viewType == 1) {
-            ViewHolder1 viewHolder = (ViewHolder1) holder;
+
+            final ViewHolder1 viewHolder = (ViewHolder1) holder;
 
             viewHolder.dayDate.setText(item.day);
             viewHolder.dayDesc.setText(item.description);
@@ -102,22 +116,28 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             String description = item.description;
 
             if (descriptionContains("cloud", description)) {
-                viewHolder.imageView.setImageResource(R.drawable.cloud);
+                viewHolder.imageView.setImageResource(R.drawable.cloud_big);
             }
             if (descriptionContains("rain", description)) {
-                viewHolder.imageView.setImageResource(R.drawable.rain);
+                viewHolder.imageView.setImageResource(R.drawable.rain_big);
             }
             if (descriptionContains("snow", description)) {
-                viewHolder.imageView.setImageResource(R.drawable.snow);
+                viewHolder.imageView.setImageResource(R.drawable.snow_big);
             }
             if (descriptionContains("thunder", description)) {
-                viewHolder.imageView.setImageResource(R.drawable.thunder);
+                viewHolder.imageView.setImageResource(R.drawable.thunder_big);
             }
             if (descriptionContains("clear", description)) {
-                viewHolder.imageView.setImageResource(R.drawable.clear);
+                viewHolder.imageView.setImageResource(R.drawable.clear_big);
             }
+
+            final int newColor = ContextCompat.getColor(context, R.color.text_color_gray);
+            viewHolder.imageView.setColorFilter(newColor, PorterDuff.Mode.SRC_ATOP);
+
+
         }
     }
+
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void startDetailActivityIntent(DayWeather item, View view, int position) {
@@ -129,7 +149,9 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         Intent intent;
         Bundle bundle = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(activity, view.findViewById(R.id.imgIcon), activity.getString(R.string.transition_image)).toBundle();
+                makeSceneTransitionAnimation(activity,
+                        new Pair<>(view.findViewById(R.id.dayDesc), "description"),
+                        new Pair<>(view.findViewById(R.id.imgIcon), "image")).toBundle();
 
 
         intent = new Intent(activity, DetailActivity.class);
@@ -197,6 +219,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             dayDesc = (TextView) convertView.findViewById(R.id.dayDesc);
             dayTempHigh = (TextView) convertView.findViewById(R.id.dayTempHigh);
             dayTempLow = (TextView) convertView.findViewById(R.id.dayTempLow);
+
         }
     }
 

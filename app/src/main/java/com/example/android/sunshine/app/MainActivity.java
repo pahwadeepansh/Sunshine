@@ -15,6 +15,8 @@
  */
 package com.example.android.sunshine.app;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -25,6 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+//        requestWindowFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
@@ -74,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     private void openPreferredLocationInMap() {
         SharedPreferences sharedPrefs =

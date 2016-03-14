@@ -11,10 +11,12 @@
         <item name="android:windowActivityTransitions" tools:targetApi="lollipop">true</item>
 
 
-        <item name="android:windowEnterTransition" tools:targetApi="lollipop">@transition/change_image_transform
+        <item name="android:windowEnterTransition" tools:targetApi="lollipop">
+            @transition/change_image_transform
         </item>
 
-        <item name="android:windowExitTransition" tools:targetApi="lollipop">@transition/change_image_transform
+        <item name="android:windowExitTransition" tools:targetApi="lollipop">
+            @transition/change_image_transform
         </item>
 
         <!--&lt;!&ndash; specify shared element transitions &ndash;&gt;-->
@@ -32,4 +34,9 @@
         <item name="colorPrimary">@color/blue_500</item>
     </style>
 
+    <style name="textStyle" >
+        <item name="android:textColor">@color/text_color_gray</item>
+        <item name="android:colorPrimary" tools:targetApi="lollipop">@color/text_color_gray</item>
+        <item name="android:textSize">22dp</item>
+    </style>
 </resources>
