@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.Model;
 
 import java.io.Serializable;
 
@@ -7,8 +7,8 @@ import java.io.Serializable;
  */
 public class CurrentWeather {
 
-    String current_temp;
-    String city;
+    public String current_temp;
+    public String city;
 
     public void DayWeather(String temp, String city){
         this.current_temp=temp;

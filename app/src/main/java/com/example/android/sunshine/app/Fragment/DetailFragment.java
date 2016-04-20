@@ -1,6 +1,5 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.Fragment;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,9 +13,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toolbar;
 
-import java.io.Serializable;
+import com.example.android.sunshine.app.Model.CurrentWeather;
+import com.example.android.sunshine.app.Model.DayWeather;
+import com.example.android.sunshine.app.R;
+import com.example.android.sunshine.app.Util.CustomViewPagerAdapter;
+
 import java.util.ArrayList;
 
 /**

@@ -1,23 +1,19 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-
-import java.io.Serializable;
 
 /**
  * Created by deepanshpahwa on 2/19/16.
  */
 public class DayWeather implements Parcelable{
-    String day;
-    String high;
-    String low;
-    String description;
-    String pressure;
-    String humidity;
-    String dayAverage;
+    public String day;
+    public String high;
+    public String low;
+    public String description;
+    public String pressure;
+    public String humidity;
+    public String dayAverage;
 
 
     public void DayWeather(String day,String high, String low, String description,String pressure, String humidity, String dayAverage){
@@ -30,7 +26,7 @@ public class DayWeather implements Parcelable{
         this.dayAverage=dayAverage;
     }
 
-    protected DayWeather(Parcel in) {
+    public DayWeather(Parcel in) {
         day = in.readString();
         high = in.readString();
         low = in.readString();

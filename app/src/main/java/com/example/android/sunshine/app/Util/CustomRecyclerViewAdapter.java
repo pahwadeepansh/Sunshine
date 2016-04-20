@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.Util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -13,6 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.android.sunshine.app.DetailActivity;
+import com.example.android.sunshine.app.Model.CurrentWeather;
+import com.example.android.sunshine.app.Model.DayWeather;
+import com.example.android.sunshine.app.R;
 
 import java.util.ArrayList;
 
@@ -65,17 +70,17 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         if (viewType == 0) {
             ViewHolder0 viewHolder = (ViewHolder0) holder;
 
-            viewHolder.today.setText("Today");
+            viewHolder.today.setText(R.string.TodayString);
             viewHolder.city.setText(currentTemp.city);
             viewHolder.currentTemp.setText(currentTemp.current_temp + "°");
-            viewHolder.textNow.setText("Now");
+            viewHolder.textNow.setText(R.string.NowString);
             viewHolder.dayHigh.setText(item.high + "°");
             viewHolder.dayLow.setText(item.low + "°");
 
 
             String description = item.description;
 
-            if (descriptionContains("cloud", description)) {
+            if (descriptionContains(activity.getString(R.string.ClousString), description)) {
                 viewHolder.imageView.setImageResource(R.drawable.cloud);
             }
             if (descriptionContains("rain", description)) {

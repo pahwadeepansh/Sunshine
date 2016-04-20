@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.Fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,7 +23,6 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +31,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.android.sunshine.app.Model.CurrentForecastModels.CurrentForecast;
+import com.example.android.sunshine.app.Model.CurrentWeather;
+import com.example.android.sunshine.app.Model.DayWeather;
+import com.example.android.sunshine.app.Model.ForecastModels.Forecast;
+import com.example.android.sunshine.app.Model.ForecastModels.Weather;
+import com.example.android.sunshine.app.Model.ForecastModels.data;
+import com.example.android.sunshine.app.Model.ForecastModels.temp;
+import com.example.android.sunshine.app.R;
+import com.example.android.sunshine.app.Retrofit.CurrentWeatherAPI;
+import com.example.android.sunshine.app.Retrofit.WeatherAPI;
+import com.example.android.sunshine.app.Util.CustomRecyclerViewAdapter;
+import com.example.android.sunshine.app.Util.DividerItemDecoration;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -42,6 +54,8 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
+;
 
 
 public class ForecastFragment extends Fragment {
@@ -67,26 +81,15 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.forecastfragment, menu);
-
-
-        ;
     }
-
-    private Toolbar toolbar;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-            int numOfDays = Integer.parseInt(getSharedPreferences_Days());
             updateWeather();
             return true;
-
-
         }
 //        if (id==R.id.)
 
@@ -103,15 +106,12 @@ public class ForecastFragment extends Fragment {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         return (sharedPrefs.getString(getActivity().getString(R.string.pref_location_key),
                 getActivity().getString(R.string.pref_location_default)));
-
     }
 
     private String getSharedPreference_Units() {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         return (sharedPrefs.getString(getActivity().getString(R.string.pref_units_key),
                 getActivity().getString(R.string.pref_units_metric)));
-
-
     }
 
 
@@ -119,33 +119,17 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // The ArrayAdapter will take data from a source and
-        // use it to populate the ListView it's attached to.
-
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         listView = (RecyclerView) rootView.findViewById(R.id.listview_forecast);
         listView.addItemDecoration(new DividerItemDecoration(getActivity()));
         listView.setHasFixedSize(true);
 
-
-        // Get a reference to the ListView, and attach this adapter to it.
         LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         listView.setLayoutManager(llm);
         listView.setAdapter(mForecastAdapter);
 
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                DayWeather forecast = mForecastAdapter.getItem(position);
-//                Intent intent = new Intent(getActivity(), DetailActivity.class)
-//                        .putExtra(Intent.EXTRA_TEXT, "DayWeather Forecast");
-//                startActivity(intent);
-//            }
-//        });
 
         return rootView;
     }
@@ -201,16 +185,15 @@ public class ForecastFragment extends Fragment {
 
             highAndLow = formatHighLows(high, low, unitType);
             resultStrs.add(i, new DayWeather(Parcel.obtain()));
-            resultStrs.get(i).day =day;
+            resultStrs.get(i).day = day;
             resultStrs.get(i).description = description;
             resultStrs.get(i).high = highAndLow[0];
             resultStrs.get(i).low = highAndLow[1];
             resultStrs.get(i).humidity = humidity;
             resultStrs.get(i).pressure = pressure;
-            resultStrs.get(i).dayAverage =  Integer.toString(((int)Double.parseDouble(dayAverage)));
+            resultStrs.get(i).dayAverage = Integer.toString(((int) Double.parseDouble(dayAverage)));
         }
         return resultStrs;
-
     }
 
     private CurrentWeather getCurrentWeatherDataFromJSON(CurrentForecast forecast) {
@@ -218,18 +201,18 @@ public class ForecastFragment extends Fragment {
         CurrentWeather result = new CurrentWeather();// delete
         result.current_temp = roundOff(forecast.main.temp, unitType);
         result.city = forecast.city;
-        return result; //delete
+        return result;
 
     }
 
-    private String getReadableDateString(long time) {
+    public String getReadableDateString(long time) {
         // Because the API returns a unix timestamp (measured in seconds),
         // it must be converted to milliseconds in order to be converted to valid date.
         SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
         return shortenedDateFormat.format(time);
     }
 
-    private String[] formatHighLows(double celsiusHigh, double celsiusLow, String desiredUnitType) {
+    public String[] formatHighLows(double celsiusHigh, double celsiusLow, String desiredUnitType) {
         return formatHighLows(
                 celsiusHigh,
                 celsiusLow,
@@ -241,7 +224,7 @@ public class ForecastFragment extends Fragment {
      * Prepare the weather high/lows for presentation.
      */
     @VisibleForTesting
-    String[] formatHighLows(double celsiusHigh, double celsiusLow, String desiredUnitType, String imperialUnitTypeName) {
+    public String[] formatHighLows(double celsiusHigh, double celsiusLow, String desiredUnitType, String imperialUnitTypeName) {
 
         if (desiredUnitType.equals(imperialUnitTypeName)) {
             celsiusHigh = (celsiusHigh * 1.8) + 32;
@@ -312,7 +295,6 @@ public class ForecastFragment extends Fragment {
                 Log.e("ERROR", "WTH? in first retrofit connection", t);
             }
         });
-
 //second retrofit network starts
         Retrofit retrofitNow = new Retrofit.Builder().baseUrl("http://api.openweathermap.org").addConverterFactory(GsonConverterFactory.create()).build();
         CurrentWeatherAPI weatherNow = retrofitNow.create(CurrentWeatherAPI.class);
@@ -340,13 +322,10 @@ public class ForecastFragment extends Fragment {
             public void onFailure(Throwable t) {
                 Log.e("ERROR", "WTH? in second retrofit connection", t);
             }
-
-
         });
         //second retrofit network ends
 
         updateAdapter();
-        //  Log.e("ERROR", String.valueOf(mForecastAdapter.getCount()));
     }
 
     private void updateAdapter() {

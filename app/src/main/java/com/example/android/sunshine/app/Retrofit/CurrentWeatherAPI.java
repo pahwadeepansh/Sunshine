@@ -1,8 +1,9 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.Retrofit;
+
+import com.example.android.sunshine.app.Model.CurrentForecastModels.CurrentForecast;
 
 import retrofit.Call;
 import retrofit.http.GET;
-import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**

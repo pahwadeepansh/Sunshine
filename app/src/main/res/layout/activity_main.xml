@@ -11,6 +11,6 @@
         android:id="@+id/container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        tools:activity=".MainActivity"
+        tools:activity=".com.example.android.sunshine.app.MainActivity"
         tools:ignore="MergeRootFrame"></FrameLayout>
 </LinearLayout>

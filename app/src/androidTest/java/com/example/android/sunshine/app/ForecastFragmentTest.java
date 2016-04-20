@@ -1,6 +1,6 @@
 package com.example.android.sunshine.app;
 
-import junit.framework.Assert;
+import com.example.android.sunshine.app.Fragment.ForecastFragment;
 
 import org.junit.Before;
 import org.junit.Test;

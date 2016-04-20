@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.Util;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -1,4 +1,4 @@
-/*
+package com.example.android.sunshine.app;/*
  * Copyright (C) 2014 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package com.example.android.sunshine.app;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.android.sunshine.app.Fragment.DetailFragment;
 
 public class DetailActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -76,7 +73,7 @@ public class DetailActivity extends AppCompatActivity {
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event)  {
 //        if (keyCode == KeyEvent.KEYCODE_BACK ) {
-//            Intent i = new Intent(this, MainActivity.class);
+//            Intent i = new Intent(this, com.example.android.sunshine.app.MainActivity.class);
 //            startActivity(i);
 //            return true;
 //        }

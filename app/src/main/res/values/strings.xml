@@ -54,5 +54,8 @@
 
     <!-- Value in SharedPreferences for imperial temperature unit option [CHAR LIMIT=NONE] -->
     <string name="pref_units_imperial" translatable="false">imperial</string>
+    <string name="TodayString">Today</string>
+    <string name="NowString">Now</string>
+    <string name="ClousString">cloud</string>
 
 </resources>

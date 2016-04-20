@@ -1,4 +1,4 @@
-/*
+package com.example.android.sunshine.app;/*
  * Copyright (C) 2014 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine.app;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +20,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.util.Log;
+
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
